@@ -103,6 +103,21 @@ public class GPSComputer {
 
 	}
 
+	public double[] climbs() {
+		double[] climbs = new double[gpspoints.length - 1];
+		for (int i = 0; i < gpspoints.length - 1; i++) {
+			double elevation = (gpspoints[i].getElevation() - gpspoints[i + 1].getElevation());
+			double distance = GPSUtils.distance(gpspoints[i], gpspoints[i + 1]);
+			double slope = (elevation / distance) * 100;
+			climbs[i] = slope;
+		}
+		return climbs;
+	}
+
+	public double maxClimb() {
+		return GPSUtils.findMax(climbs());
+	}
+
 	/*
 	 * bicycling, <10 mph, leisure, to work or for pleasure 4.0 bicycling, general
 	 * 8.0 bicycling, 10-11.9 mph, leisure, slow, light effort 6.0 bicycling,
@@ -164,18 +179,40 @@ public class GPSComputer {
 
 	public void displayStatistics() {
 
-		System.out.println("==============================================");
+		String outstr = "";
+
+		outstr += "==============================================\n";
 
 		// TODO - START
 
-		System.out.printf("%-22s: %-10s%n", "Total time", GPSUtils.formatTime(totalTime()));
-		System.out.printf("%-22s: %-3.2f %-5s %n", "Total distance", totalDistance() / 1000, "km");
-		System.out.printf("%-22s: %-3.2f %-5s %n", "Total elecation", totalElevation(), "m");
-		System.out.printf("%-22s: %-3.2f %-5s %n", "Max speed", maxSpeed(), "km/t");
-		System.out.printf("%-22s: %-3.2f %-5s %n", "Average speed", averageSpeed(), "km/t");
-		System.out.printf("%-22s: %-3.2f %-5s %n", "Energy", totalKcal(WEIGHT), "kcal");
+		outstr += String.format("%-22s: %-10s%n", "Total time", GPSUtils.formatTime(totalTime()));
+		outstr += String.format("%-22s: %-3.2f %-5s %n", "Total distance", totalDistance() / 1000, "km");
+		outstr += String.format("%-22s: %-3.2f %-5s %n", "Total elecation", totalElevation(), "m");
+		outstr += String.format("%-22s: %-3.2f %-5s %n", "Max speed", maxSpeed(), "km/t");
+		outstr += String.format("%-22s: %-3.2f %-5s %n", "Average speed", averageSpeed(), "km/t");
+		outstr += String.format("%-22s: %-3.2f %-5s %n", "Energy", totalKcal(WEIGHT), "kcal");
 
-		System.out.println("==============================================");
+		outstr += "==============================================";
+		System.out.print(outstr);
+
+		// TODO - SLUTT
+
+	}
+
+	public String[] getStatistics() {
+
+		String[] outstr = new String[6];
+
+		// TODO - START
+
+		outstr[0] = String.format("%-22s: %-10s%n", "Total time", GPSUtils.formatTime(totalTime()));
+		outstr[1] = String.format("%-22s: %-3.2f %-5s %n", "Total distance", totalDistance() / 1000, "km");
+		outstr[2] = String.format("%-22s: %-3.2f %-5s %n", "Total elecation", totalElevation(), "m");
+		outstr[3] = String.format("%-22s: %-3.2f %-5s %n", "Max speed", maxSpeed(), "km/t");
+		outstr[4] = String.format("%-22s: %-3.2f %-5s %n", "Average speed", averageSpeed(), "km/t");
+		outstr[5] = String.format("%-22s: %-3.2f %-5s %n", "Energy", totalKcal(WEIGHT), "kcal");
+
+		return outstr;
 
 		// TODO - SLUTT
 
